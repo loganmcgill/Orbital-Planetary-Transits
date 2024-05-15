@@ -1,6 +1,7 @@
 import math
 from star import star
-from constants import G
+
+G = 6.67*(10**-11)
 
 class planet():
   """
@@ -17,7 +18,6 @@ class planet():
   def __init__(
     self,
     star: star,
-    delta_flux: float = 0, # Unit
     orbital_period: float = 0, # Unit
     density: float = 0, # Unit
     mass: float = 0, # in kg
@@ -36,7 +36,6 @@ class planet():
       radius(float):
       velocity(float): Orbital velocity in m/s 
     """
-    self.delta_flux = delta_flux
     self.orbital_period = orbital_period
     self.density = density
     self.mass = mass
@@ -49,6 +48,10 @@ class planet():
     """
     Find the orbital radius of planet, given the orbital period of the planet and the mass of the star
     """
+
+    if self.orbital_period == 0:
+      print("WARNING: You may not use this function before orbital_period is defined")
+      return -1
     
     radius = G * self.star.mass * (self.orbital_period**2)
     radius /= 4 * (math.pi**2)
@@ -58,7 +61,9 @@ class planet():
 
   def find_mass(self) -> float:
     """
-    
+    Find the mass of the planet with the mass via MV = mv
+
+    :returns: Mass of the planet
     """
     # MV = mv
     pl_mass = self.star.mass * self.star.wobble
@@ -67,7 +72,7 @@ class planet():
     return pl_mass
 
   def find_radius(self) -> float:
-    radius = (self.delta_flux)**0.5 * self.star.radius
+    radius = (self.star.delta_flux)**0.5 * self.star.radius
     self.radius = radius
     return radius
 
